@@ -1,0 +1,13 @@
+blueprint:
+  name: Homeseer Multi-Dimmer (ZWave-JS)
+  description: >
+    Create automations for HomeSeer Dimmers using the Z-Wave JS integration.
+
+    Runtime variables available to actions:
+
+    • this_device - Primary entity associated with the triggering dimmer.
+    • light_entity - The light entity of the dimmer that triggered the event.
+    • triggering_device - Device ID of the dimmer that triggered the event.
+    • device_model - Model of the triggering device.
+    • button_id - Scene/button identifier.
+    • press_count - Press type.
