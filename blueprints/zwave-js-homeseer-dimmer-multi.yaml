@@ -11,6 +11,7 @@ blueprint:
     and quintuple-tap actions.
 
   Available runtime variables (for use in action YAML)
+
     light_entity
       The light entity of the dimmer that triggered the event.
 
@@ -25,7 +26,6 @@ blueprint:
 
     press_count
       The press type.
-
   domain: automation
   input:
     homeseer_switches:
