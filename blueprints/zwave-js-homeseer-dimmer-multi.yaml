@@ -118,7 +118,7 @@ blueprint:
       default: []
       selector:
         action: {}
-  source_url: https://github.com/tewhitehurst/ha-bp-hsdim/blob/main/zwave-js-homeseer-dimmer-multi.yaml
+  source_url: https://github.com/tewhitehurst/HomeAssistant/blob/main/blueprints/zwave-js-homeseer-dimmer-multi.yaml
 mode: single
 max_exceeded: silent
 variables:
