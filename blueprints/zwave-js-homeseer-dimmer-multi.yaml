@@ -11,3 +11,205 @@ blueprint:
     • device_model - Model of the triggering device.
     • button_id - Scene/button identifier.
     • press_count - Press type.
+  domain: automation
+  input:
+    homeseer_switches:
+      name: Homeseer Dimmers
+      description: List of available HomeSeer Dimmers
+      selector:
+        device:
+          filter:
+            - integration: zwave_js
+              manufacturer: HomeSeer Technologies
+              model: HS-WD100+
+            - integration: zwave_js
+              manufacturer: HomeSeer Technologies
+              model: HS-WD200+
+          multiple: true
+    button_a:
+      name: Button A - Up/On press 1x
+      description: Action to run, when the button is pressed one time. Typically,
+        you will only set this if you have disabled the relay.
+      default: []
+      selector:
+        action: {}
+    button_b:
+      name: Button B - Down/Off press 1x
+      description: Action to run, when the button is pressed one time. Typically,
+        you will only set this if you have disabled the relay.
+      default: []
+      selector:
+        action: {}
+    button_a_held:
+      name: Button A - Up/On held down
+      description: Action to run, when the button is held down. Typically, you will
+        only set this if you have disabled the relay.
+      default: []
+      selector:
+        action: {}
+    button_b_held:
+      name: Button B - Down/Off held down
+      description: Action to run, when the button is held down. Typically, you will
+        only set this if you have disabled the relay.
+      default: []
+      selector:
+        action: {}
+    button_a2:
+      name: Button A - Up/On press 2x
+      description: Action to run, when the button is pressed two times.
+      default: []
+      selector:
+        action: {}
+    button_b2:
+      name: Button B - Down/Off press 2x
+      description: Action to run, when the button is pressed two times.
+      default: []
+      selector:
+        action: {}
+    button_a3:
+      name: Button A - Up/On press 3x
+      description: Action to run, when the button is pressed three times.
+      default: []
+      selector:
+        action: {}
+    button_b3:
+      name: Button B - Down/Off press 3x
+      description: Action to run, when the button is pressed three times.
+      default: []
+      selector:
+        action: {}
+    button_a4:
+      name: Button A - Up/On press 4x
+      description: Action to run, when the button is pressed four times.  Not available on HS-WD100+!
+      default: []
+      selector:
+        action: {}
+    button_b4:
+      name: Button B - Down/Off press 4x
+      description: Action to run, when the button is pressed four times.  Not available on HS-WD100+!
+      default: []
+      selector:
+        action: {}
+    button_a5:
+      name: Button A - Up/On press 5x
+      description: Action to run, when the button is pressed five times.  Not available on HS-WD100+!
+      default: []
+      selector:
+        action: {}
+    button_b5:
+      name: Button B - Down/Off press 5x
+      description: Action to run, when the button is pressed five times.  Not available on HS-WD100+!
+      default: []
+      selector:
+        action: {}
+  source_url: https://github.com/tewhitehurst/ha-bp-hsdim/blob/main/zwave-js-homeseer-dimmer-multi.yaml
+mode: single
+max_exceeded: silent
+variables:
+  monitored_devices: !input homeseer_switches
+trigger:
+- platform: event
+  event_type: zwave_js_value_notification
+condition: >
+  {{ trigger.event.data.device_id in monitored_devices }}
+action:
+- variables:
+    triggering_device: "{{ trigger.event.data.device_id }}"
+    device_model: >
+      {{ device_attr(triggering_device, 'model') }}
+    button_id: "{{ trigger.event.data.property_key_name }}"
+    press_count: "{{ trigger.event.data.value }}"
+
+    light_entity: >
+      {{
+        (
+          device_entities(triggering_device)
+          | select('match', '^light\.')
+          | list
+          | first
+        ) | default('', true)
+      }}
+
+    switch_entity: >
+      {{
+        (
+          device_entities(triggering_device)
+          | select('match', '^switch\.')
+          | list
+          | first
+        ) | default('', true)
+      }}
+    this_device: >
+      {{
+        light_entity
+        if light_entity != ''
+        else switch_entity
+      }}
+# - service: logbook.log
+  # data:
+    # name: Device
+    # message: '{{ zwave_device }}'
+- service: logbook.log
+  data:
+    name: Triggering Device
+    message: '{{ triggering_device }}'
+- service: logbook.log
+  data:
+    name: Device Model
+    message: "{{ device_model }}"
+- service: logbook.log
+  data:
+    name: Button Id
+    message: '{{ button_id }}'
+- service: logbook.log
+  data:
+    name: Press Count
+    message: '{{ press_count }}'
+- service: logbook.log
+  data:
+    name: Light Entity
+    message: '{{ light_entity }}'
+- choose:
+  # Actions common to HS-WD100+ & HS-WD200+
+  - conditions: >
+      {{ button_id == "001" and press_count == "KeyPressed" }}
+    sequence: !input button_a
+  - conditions: >
+      {{ button_id == "002" and press_count == "KeyPressed" }}
+    sequence: !input button_b
+  - conditions: >
+      {{ button_id == "001" and press_count == "KeyHeldDown" }}
+    sequence: !input button_a_held
+  - conditions: >
+      {{ button_id == "002" and press_count == "KeyHeldDown" }}
+    sequence: !input button_b_held
+  - conditions: >
+      {{ button_id == "001" and press_count == "KeyPressed2x" }}
+    sequence: !input button_a2
+  - conditions: >
+      {{ button_id == "002" and press_count == "KeyPressed2x" }}
+    sequence: !input button_b2
+  - conditions: >
+      {{ button_id == "001" and press_count == "KeyPressed3x" }}
+    sequence: !input button_a3
+  - conditions: >
+      {{ button_id == "002" and press_count == "KeyPressed3x" }}
+    sequence: !input button_b3
+
+  # Actions exclusive to HS-WD200+ (Ignored on HS-WD100+)
+  - conditions: >
+      {{ device_model == 'HS-WD200+' }}
+    sequence:
+      - choose:
+          - conditions: >
+              {{ button_id == "001" and press_count == "KeyPressed4x" }}
+            sequence: !input button_a4
+          - conditions: >
+              {{ button_id == "002" and press_count == "KeyPressed4x" }}
+            sequence: !input button_b4
+          - conditions: >
+              {{ button_id == "001" and press_count == "KeyPressed5x" }}
+            sequence: !input button_a5
+          - conditions: >
+              {{ button_id == "002" and press_count == "KeyPressed5x" }}
+            sequence: !input button_b5
