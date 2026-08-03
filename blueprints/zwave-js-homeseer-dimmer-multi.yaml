@@ -1,5 +1,5 @@
 blueprint:
-  name: Homeseer Multi-Dimmer (ZWave-JS)
+  name: HomeSeer Multi-Dimmer (ZWave-JS)
   description: >-
     ## Create automations for HomeSeer Dimmers using the Z-Wave JS integration.
     
