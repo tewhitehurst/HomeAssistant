@@ -1,6 +1,6 @@
 blueprint:
   name: Homeseer Multi-Dimmer (ZWave-JS)
-  description: |
+  description: >
   Create automations for HomeSeer Dimmers using the Z-Wave JS integration.
 
   HS-WD100+
