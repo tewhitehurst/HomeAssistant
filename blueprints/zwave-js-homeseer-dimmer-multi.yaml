@@ -14,19 +14,19 @@ blueprint:
     Available runtime variables (for use in action YAML):
     
       `light_entity`
-          *The light entity of the dimmer that triggered the event.*
+        * *The light entity of the dimmer that triggered the event.*
       `switch_entity`
-          *The switch entity of the switch/dimmer that triggered the event.*
+        * *The switch entity of the switch/dimmer that triggered the event.*
       `this_device`
-          *Self reference to either the switch or light entity, depending on which exists*
+        * *Self reference to either the switch or light entity, depending on which exists*
       `triggering_device`
-          *The device ID of the dimmer that triggered the event.*
+        * *The device ID of the dimmer that triggered the event.*
       `device_model`
-          *The model of the triggering device.*
+        * *The model of the triggering device.*
       `button_id`
-          *The scene/button identifier.*
+        * *The scene/button identifier.*
       `press_count`
-          *The press type.*
+        * *The press type.*
   domain: automation
   input:
     homeseer_switches:
