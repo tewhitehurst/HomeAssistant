@@ -2,14 +2,16 @@ blueprint:
   name: Homeseer Multi-Dimmer (ZWave-JS)
   description: |-
     Create automations for HomeSeer Dimmers using the Z-Wave JS integration.
+    
     ---
+    
     **HS-WD100+**
-      Supports single, held, double-tap, and triple-tap actions.
+        Supports single, held, double-tap, and triple-tap actions.
       
     **HS-WD200+**
-      upports single, held, double-tap, triple-tap, quadruple-tap, and quintuple-tap actions.
+        Supports single, held, double-tap, triple-tap, quadruple-tap, and quintuple-tap actions.
     
-    Available runtime variables (for use in action YAML):
+    **Available runtime variables (for use in action YAML)**
       `light_entity`
         The light entity of the dimmer that triggered the event.
   domain: automation
